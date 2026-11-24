@@ -1,0 +1,166 @@
+name: Publish ContextBridge v0.1.0
+
+on:
+  push:
+    branches: [release-validation/v0.1.0]
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Full SHA of the audited v0.1.0 candidate
+        required: true
+        type: string
+      ci_run_id:
+        description: Successful CI run ID for that candidate
+        required: true
+        type: string
+      wheel_sha256:
+        description: Audited wheel SHA-256
+        required: true
+        type: string
+      sdist_sha256:
+        description: Audited sdist SHA-256
+        required: true
+        type: string
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: contextbridge-v0.1.0-${{ github.event_name }}
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: v0.1.0
+  WHEEL_FILE: contextbridge_agents-0.1.0-py3-none-any.whl
+  SDIST_FILE: contextbridge_agents-0.1.0.tar.gz
+  PYPI_PROJECT_API: https://pypi.org/pypi/contextbridge-agents/json
+
+jobs:
+  build:
+    if: >-
+      github.repository == 'AlemaoBoy/ContextBridge' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/release-validation/v0.1.0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.15.2"
+      - name: Build distributions from the candidate commit
+        run: |
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+          python -m pip install build==1.6.1 hatchling==1.33.0
+          python -m build --no-isolation
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: built-distributions-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+
+  validate:
+    needs: build
+    if: >-
+      !cancelled() && github.repository == 'AlemaoBoy/ContextBridge' &&
+      ((github.event_name == 'push' && needs.build.result == 'success') ||
+       (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: github.event_name == 'push'
+        with:
+          name: built-distributions-${{ github.run_attempt }}
+          path: dist
+      - name: Verify the candidate, CI, tag, and audited GitHub assets
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE: ${{ inputs.candidate_sha }}
+          CI_RUN: ${{ inputs.ci_run_id }}
+          WHEEL_HASH: ${{ inputs.wheel_sha256 }}
+          SDIST_HASH: ${{ inputs.sdist_sha256 }}
+        run: |
+          [[ "$CANDIDATE" =~ ^[0-9a-f]{40}$ && "$CANDIDATE" == "$GITHUB_SHA" ]]
+          [[ "$CI_RUN" =~ ^[0-9]+$ ]]
+          [[ "$WHEEL_HASH" =~ ^[0-9a-f]{64}$ && "$SDIST_HASH" =~ ^[0-9a-f]{64}$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN" |
+            jq -e --arg sha "$CANDIDATE" '
+              .head_sha == $sha and .path == ".github/workflows/ci.yml" and
+              .conclusion == "success" and
+              (.head_branch == "main" or .head_branch == "release-validation/v0.1.0")
+            ' > /dev/null
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN/jobs?per_page=100" |
+            jq -e '.total_count == 15 and all(.jobs[]; .conclusion == "success")' > /dev/null
+          tag_object=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" |
+            jq -er '.object | select(.type == "tag") | .sha')
+          gh api "repos/$GITHUB_REPOSITORY/git/tags/$tag_object" |
+            jq -e --arg sha "$CANDIDATE" '.object.type == "commit" and .object.sha == $sha' > /dev/null
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" |
+            jq -e '.draft == false and .prerelease == false' > /dev/null
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "$WHEEL_FILE" --pattern "$SDIST_FILE" --dir dist
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern SHA256SUMS
+          printf '%s  %s\n' "$WHEEL_HASH" "$WHEEL_FILE" "$SDIST_HASH" "$SDIST_FILE" > approved-sums
+          cmp approved-sums SHA256SUMS
+          (cd dist && sha256sum --check --strict ../approved-sums)
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.15.2"
+      - name: Check package metadata and generate checksums
+        run: |
+          test "$(find dist -mindepth 1 -maxdepth 1 | wc -l)" -eq 2
+          python -m pip install twine==7.0.0
+          python -m twine check --strict "dist/$WHEEL_FILE" "dist/$SDIST_FILE"
+          (cd dist && sha256sum "$WHEEL_FILE" "$SDIST_FILE") > SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: validated-distributions-${{ github.run_attempt }}
+          path: |
+            dist/
+            SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: validate
+    if: >-
+      github.repository == 'AlemaoBoy/ContextBridge' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/contextbridge-agents/0.1.0/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: validated-distributions-${{ github.run_attempt }}
+      - name: Verify audited hashes and PyPI name availability
+        env:
+          WHEEL_HASH: ${{ inputs.wheel_sha256 }}
+          SDIST_HASH: ${{ inputs.sdist_sha256 }}
+        run: |
+          test "$(find dist -mindepth 1 -maxdepth 1 | wc -l)" -eq 2
+          printf '%s  %s\n' "$WHEEL_HASH" "$WHEEL_FILE" "$SDIST_HASH" "$SDIST_FILE" | cmp - SHA256SUMS
+          (cd dist && sha256sum --check --strict ../SHA256SUMS)
+          status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' "$PYPI_PROJECT_API")
+          if [[ "$status" != 404 ]]; then
+            echo "::error::Expected HTTP 404 for a new PyPI project, got $status"
+            exit 1
+          fi
+      - name: Publish to PyPI using OIDC and attestations
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          attestations: true
