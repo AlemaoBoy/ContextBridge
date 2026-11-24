@@ -215,7 +215,9 @@ def validate_authorized_restore_target(
 
     posix_str = resolved.as_posix().lower()
     for prefix in FORBIDDEN_SYSTEM_PREFIXES:
-        if posix_str == prefix or posix_str.startswith(prefix + "/"):
+        # macOS resolves /etc to /private/etc before checking the destination.
+        canonical = Path(prefix).resolve().as_posix().lower() if os.name != "nt" else prefix
+        if posix_str == canonical or posix_str.startswith(canonical + "/"):
             raise SecurityViolationError(
                 f"Refusing to restore into protected OS directory: {resolved}"
             )
