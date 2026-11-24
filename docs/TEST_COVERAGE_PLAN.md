@@ -1,6 +1,6 @@
 # Test Coverage & Quality Plan (v0.1.0 -> v0.2.0)
 
-> **Status:** Baseline measured on v0.1.0 (`93 passed`, `85%` statement + branch coverage on Windows / Python 3.15.2).
+> **Status:** The historical v0.1.0 measurement was `93 passed` at `85%`. The audited Phase 2A checkpoint passed `105` tests at `95.85%` combined coverage on Windows / Python 3.15.2.
 > **Policy:** No artificial tests to game percentages, no removing existing tests, and no `# pragma: no cover` exclusions without documented justification (such as OS-exclusive defensive branches).
 
 ---
@@ -9,9 +9,9 @@
 
 | Milestone | Overall Target (Stmts + Branches) | Critical Modules (`security/`, `backup/`, `skills/migrator.py`) | Test Pass Rate |
 | --- | --- | --- | --- |
-| **Current Baseline (v0.1.0)** | **85%** (`2316` stmts, `744` branches) | `79%` – `94%` | **100%** (`93/93`) |
-| **Phase 2A (Pre-v0.2.0 Hardening)** | **>= 92%** | **>= 95%** | **100%** |
-| **Phase 2B (v0.2.0 Release Gate)** | **>= 95%** | **>= 95%** (including new `providers/` HTTP security & `context/` CBCF) | **100%** |
+| **Historical Baseline (v0.1.0)** | **85%** (`2316` stmts, `744` branches) | `79%` – `94%` | **100%** (`93/93`) |
+| **Phase 2A (Audited Checkpoint)** | **95.85%** | `security/` 97.13%, `backup/` 97.25%, `skills/migrator.py` 96.37% | **100%** (`105/105`) |
+| **Phase 2B (Offline Transfer)** | **>= 95%** | **>= 95%** for existing gates and each CBCF model, file, transfer, handoff, session-reader and CLI module | **100%** |
 
 ---
 
@@ -46,6 +46,8 @@ Below is the real, audited breakdown of every module currently below `95%` and t
 ---
 
 ## 3. Testing Strategy for New v0.2.0 Modules (Providers & CBCF)
+
+Phase 2B uses synthetic CBCF and agent files. Tests cover parser limits, duplicate keys, traversal, redaction, selection, rewind handling, deterministic artifacts, no-overwrite publication and CLI behavior with network and process creation blocked. `scripts/check_coverage_gates.py` enforces the per-module floors. The HTTP scenarios below apply to later phases.
 
 Every v0.2.0 module will ship with >= 95% statement + branch coverage from day one, strictly offline and deterministic:
 

@@ -230,12 +230,14 @@ Allowed bindings are strictly a fixed allowlist of scalar/structured tokens (`$c
 
 ### 4.2 Universal Context Engine
 
+Phase 2B implements the four local commands. The API commands remain planned for Phase 2D.
+
 | Command | Behavior |
 | --- | --- |
 | `contextbridge context inspect <FILE> [--json]` | Read-only inspection of a `.cbcf.json` file: schema version, provenance, message/tool/file counts, token estimate, lossy warnings, and heuristic secret scan. |
-| `contextbridge context export --from <AGENT_OR_FILE> [--session ID] --output <FILE.cbcf.json>` | Exports context into CBCF v1.0. For agents with documented local session formats (e.g., Claude Code JSONL, OpenCode, Gemini CLI), reads strictly read-only, runs redaction preview, and refuses silent overwrites. |
-| `contextbridge context import <FILE.cbcf.json> --to <TARGET_AGENT_OR_DIR> [--dry-run\|--apply]` | Converts a CBCF file into a portable handoff format or supported agent import target (explicitly non-executable; never injects secrets or runs tool calls). |
-| `contextbridge context convert <FILE.cbcf.json> --to-format <PROTOCOL\|markdown> --output <OUT>` | Offline conversion preview/export from CBCF into a target protocol payload or sanitized Markdown handoff document, reporting all lossy warnings. |
+| `contextbridge context export --from <AGENT_OR_FILE> [--source LOCAL_FILE] [--session ID] --output <OUT>` | Reads explicit local files. Agent IDs require `--source`. Writes a redacted CBCF or Markdown artifact. `--dry-run` previews without writing. |
+| `contextbridge context import <FILE.cbcf.json> --to <TARGET_AGENT_OR_DIR> [--dry-run\|--apply]` | Previews a portable handoff. `--apply` writes a new artifact outside agent state. |
+| `contextbridge context convert <FILE.cbcf.json> --to-format <cbcf\|handoff-md\|markdown> --output <OUT>` | Projects CBCF into selected CBCF or a Markdown handoff with loss diagnostics. `--dry-run` previews without writing. |
 | `contextbridge context send <FILE.cbcf.json> --to <PROVIDER> [--model M] [--redact/--no-redact] [--dry-run\|--apply] [--yes]` | **Preview-first** outbound transmission: displays exact endpoint URL, model, redacted payload summary, byte size, estimated input tokens, and cost warning before prompting for confirmation (`--apply` + confirmation/`--yes`). Saves response as CBCF if `--save-response` is set. |
 | `contextbridge context receive --from <PROVIDER> [--response-id ID \| --prompt TEXT] --output <FILE.cbcf.json>` | Captures a provider response (either retrieving a stored response ID on protocols like OpenAI Responses, or executing an explicit user-confirmed request) into a validated CBCF document with `source_kind: "api_response"`. |
 | `contextbridge context transfer --from <SOURCE> --to <TARGET> [--dry-run\|--apply] [--yes]` | Orchestrates `source -> CBCF -> redact & compatibility check -> preview -> confirm -> target`. Supports Agent->Provider, Provider->Provider, Provider->Agent/File, and Agent->Agent (when both sides support the required capability). |

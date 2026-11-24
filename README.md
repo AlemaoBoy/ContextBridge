@@ -157,6 +157,19 @@ contextbridge doctor
 contextbridge doctor --json
 ```
 
+## Offline context transfer (v0.2.0 development)
+
+Inspect a CBCF document, preview a handoff, or write a portable artifact into an existing directory.
+
+```bash
+contextbridge context inspect examples/context-handoff.cbcf.json --json
+contextbridge context export --from claude --source ./session.jsonl --output ./session.cbcf.json --dry-run
+contextbridge context convert examples/context-handoff.cbcf.json --to-format handoff-md --output ./handoff.md
+contextbridge context import examples/context-handoff.cbcf.json --to codex --format cbcf --apply
+```
+
+Export and conversion accept repeatable `--include` and `--exclude` options. Import previews by default and `--apply` writes a portable handoff. Inputs are explicit files, including OpenCode session export JSON and Gemini CLI session JSON or JSONL. Codex, Antigravity, and Cursor accept manually prepared CBCF. All operations are offline and exports redact potential secrets. See [CBCF and command options](docs/CONTEXT_FORMAT.md) and [local format compatibility](docs/PROVIDER_COMPATIBILITY.md#3-coding-agent-local-session--context-capabilities).
+
 ## Compatibility Matrix (v0.1.0)
 
 | Agent | Adapter ID | Project Skills Paths | Global Skills Paths | Env Override |

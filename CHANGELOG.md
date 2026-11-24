@@ -5,6 +5,14 @@ All notable changes to **ContextBridge** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Offline `context inspect`, `export`, `import`, and `convert` with typed CBCF 1.0, selective transfer, and deterministic Markdown and CBCF handoffs.
+- Read-only support for explicitly supplied Claude Code JSONL, OpenCode session export JSON, and Gemini CLI JSON/JSONL. Manual CBCF and portable handoffs work with all six agent IDs.
+- Bounded JSON parsing, automatic heuristic redaction, portable file reference checks, atomic output without overwrites, and individual CBCF coverage gates.
+
 ## [0.1.0] - 2026-11-24
 
 ### Added

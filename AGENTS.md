@@ -1,6 +1,6 @@
 # AGENTS.md — Guidelines for AI Coding Agents
 
-This repository contains **ContextBridge**, a local open-source CLI tool for managing and porting Agent Skills across AI coding agents.
+This repository contains **ContextBridge**, a local open-source CLI for porting Agent Skills and context across AI coding agents.
 
 ## Project Rules
 
@@ -11,6 +11,7 @@ This repository contains **ContextBridge**, a local open-source CLI tool for man
    - Never log or print matched secret values.
    - Reject path traversal, symlinks/junctions, ZIP Slip, ZIP bombs, and silent overwrites.
    - Read-only commands (`scan`, `skills list`, `skills validate`, `doctor`, `backup list`) must never create directories or modify files.
+   - Offline context commands treat session files as passive data and never execute recorded tools, read referenced file bodies, or contact a provider. Use synthetic session fixtures.
 3. **Accuracy**:
    - Do not fabricate agent paths, flags, or compatibility claims. Keep `docs/COMPATIBILITY.md` and `docs/RESEARCH.md` aligned with verified adapter definitions.
 4. **Verification**:

@@ -19,6 +19,8 @@ Core security invariants:
 
 ## Supported Versions
 
+The v0.2.0 development tree adds local context transfer. CBCF inputs are bounded and validated, and commands treat recorded instructions and tools as passive data. Artifact output uses heuristic redaction and refuses replacement. File reference checks use path metadata only. Review the selected content before sharing a handoff. See [CBCF security rules](docs/CONTEXT_FORMAT.md#8-security-rules-for-cbcf-files).
+
 | Version | Supported |
 | ------- | --------- |
 | 0.1.x   | Yes       |

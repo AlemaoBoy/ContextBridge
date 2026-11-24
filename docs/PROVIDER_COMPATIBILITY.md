@@ -55,18 +55,20 @@ ContextBridge **must not** assume all "OpenAI-compatible" or REST providers beha
 
 ---
 
-## 3. Coding Agent Local Session & Context Capabilities (Reality Check)
+## 3. Coding Agent Local Session & Context Capabilities
 
-ContextBridge will **never** fabricate session history or silently mutate proprietary agent databases. Planned local context extraction/import support for the 6 coding agents:
+Phase 2B reads files explicitly supplied by the user. Import for every agent yields a portable Markdown or CBCF artifact in a user-selected location. The context CLI never opens an agent database or launches the originating agent.
 
-| Agent | Verified Local Session Storage (Research) | Planned v0.2.0 Export (`agent -> CBCF`) | Planned v0.2.0 Import (`CBCF -> agent`) | Known Limitations & Unconfirmed Details |
-| --- | --- | --- | --- | --- |
-| **Claude Code** | `~/.claude/projects/<encoded-path>/<session-id>.jsonl` (plain JSONL event log) | **Read-only supported** (Phase 2) | Portable Markdown / `CLAUDE.md` handoff only (no direct mutation of live `.jsonl` session DB) | JSONL schema evolves across Claude Code releases; unknown event types preserved in `provider_extensions.claude`. |
-| **OpenCode** | SQLite `opencode.db` + structured JSON (`info/`, `message/`, `part/`) under OS data dir (`~/.local/share/opencode`, `~/Library/Application Support/opencode`, `%APPDATA%\opencode`) | **Read-only supported** (Phase 2, read-only SQLite URI `mode=ro` + JSON) | Portable handoff / documented JSON export format (no direct write into live SQLite DB) | Schema differs between OpenCode versions; read-only inspection only to prevent DB corruption. |
-| **Gemini CLI** | `~/.gemini/tmp/<project_hash>/chats/` (structured chat checkpoints) + `~/.gemini/GEMINI.md` | **Read-only best-effort** (Phase 2, after verifying exact schema version on disk) | Portable Markdown / `GEMINI.md` handoff only | Checkpoint JSON layout is internal and may vary across CLI updates; never write directly into `~/.gemini/tmp/`. |
-| **OpenAI Codex** | Local CLI/app state directories under `~/.codex` (format varies by harness version) | **Deferred / Best-effort** (only if verified stable structured file is present; otherwise explicit unsupported message) | Portable Markdown / `AGENTS.md` handoff only | No officially stabilized public session file specification confirmed across all Codex CLI builds. |
-| **Google Antigravity** | Internal application data under `~/.gemini/antigravity/brain/<id>/` | **Manual export / Markdown handoff only** (do not depend on internal app-private state without official spec) | Portable Markdown / `AGENTS.md` / `GEMINI.md` handoff | App-internal brain logs are private runtime internals; ContextBridge avoids brittle coupling. |
-| **Cursor** | Proprietary IDE workspace SQLite/LevelDB state (varies by OS and Cursor version) | **Not supported natively in v0.2.0** (use manual export or `.cbcf.json` input) | Portable Markdown / `.cursor/rules` handoff only | Cursor workspace DB schema is undocumented and encrypted/internal; ContextBridge will not reverse-engineer or mutate it. |
+| Agent | Accepted Phase 2B input | Evidence and limits |
+| --- | --- | --- |
+| **Claude Code** | JSONL transcript with one session ID and user/assistant records, or manual CBCF | The [hooks reference](https://code.claude.com/docs/en/hooks#common-input-fields) documents `transcript_path`. The event layout is version-dependent. Unmapped events and blocks can be retained with the opaque extension option. |
+| **OpenCode** | Session export JSON with `info` and `messages[].{info,parts}`, or manual CBCF | The [current CLI reference](https://opencode.ai/docs/cli/commands/#session) documents `opencode session export`. The [OpenCode v1.4.0 exporter](https://github.com/anomalyco/opencode/blob/v1.4.0/packages/opencode/src/cli/cmd/export.ts) specifies the supported envelope. Direct SQLite and legacy storage-tree reads are deferred. |
+| **Gemini CLI** | Session checkpoint JSON or append-only session JSONL, or manual CBCF | The [session guide](https://geminicli.com/docs/cli/session-management/) documents local history. The [upstream reader](https://github.com/google-gemini/gemini-cli/blob/main/packages/core/src/services/chatRecordingService.ts) defines replay of rewinds, patches, and metadata updates. Unknown mutation types raise an explicit error. |
+| **OpenAI Codex** | Manual CBCF | Portable handoff workflow. Native session parsing is deferred. |
+| **Google Antigravity** | Manual CBCF | Portable handoff workflow. Native session parsing is deferred. |
+| **Cursor** | Manual CBCF | Portable handoff workflow. Native session parsing is deferred. |
+
+Format checks use synthetic fixtures. Session replay or import inside the original agent has a separate contract. See [CBCF selectors and format limits](CONTEXT_FORMAT.md).
 
 ---
 

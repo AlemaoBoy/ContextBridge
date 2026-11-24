@@ -2,7 +2,7 @@
 
 This document outlines the phased evolution of **ContextBridge** from the released **v0.1.0** local skills foundation to a universal, local-first AI context portability engine.
 
-> **Scope Boundary:** Items listed under **v0.2.0 and beyond** are planned architectural proposals and are **not implemented in v0.1.0**.
+> **Scope:** Phases 2A and 2B are in the v0.2.0 development tree. Phase 2C and later remain planned.
 
 ---
 
@@ -18,17 +18,18 @@ This document outlines the phased evolution of **ContextBridge** from the releas
 
 ---
 
-## v0.2.0 (Proposed — Universal Context Engine & Custom Providers)
+## v0.2.0 (In Development — Universal Context Engine & Custom Providers)
 
 Detailed specifications: [CONTEXT_FORMAT.md](CONTEXT_FORMAT.md), [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md), [PROVIDER_COMPATIBILITY.md](PROVIDER_COMPATIBILITY.md), [TEST_COVERAGE_PLAN.md](TEST_COVERAGE_PLAN.md).
 
-### Phase 2A — Quality & Coverage Hardening (Pre-Feature Gate)
+### Phase 2A — Quality & Coverage Hardening (Implemented)
 - Raise v0.1.0 test coverage from `85%` to **`>= 95%`** overall and **`>= 95%`** across `security/`, `backup/`, and `skills/migrator.py` by testing real uncovered branches (no artificial tests).
 - Add CI coverage gate (`--cov-fail-under=95`) across Windows, Linux, and macOS.
 
-### Phase 2B — ContextBridge Context Format (CBCF v1.0), Universal Handoff & Offline Transfer
+### Phase 2B — ContextBridge Context Format (CBCF v1.0), Universal Handoff & Offline Transfer (Implemented)
 - Implement versioned Pydantic v2 CBCF v1.0 models (`schema_version: "cbcf/1.0"`), provenance differentiation (`api_response`, `agent_local_history`, `manual_export`, `converted_context`), **selective transfer** filters, **Universal Handoff** (CBCF + Markdown differentiating `extracted` vs `manual` items), extension preservation, and explicit lossy-conversion diagnostics.
 - Implement **Offline Transfer** CLI commands (zero network calls, zero token cost): `contextbridge context inspect`, `contextbridge context convert`, `contextbridge context export` (read-only local session export for verified formats such as Claude Code JSONL and OpenCode), and `contextbridge context import` (non-executable handoff output).
+- Read explicit Claude Code JSONL, Gemini CLI JSON/JSONL and OpenCode session export JSON. All agent targets use portable handoffs. See [format compatibility](PROVIDER_COMPATIBILITY.md#3-coding-agent-local-session--context-capabilities).
 
 ### Phase 2C — Custom Provider Registry & Built-In Protocol Drivers (Opt-In Network)
 - Explicitly separate **Agent Adapters** (local filesystem) from **AI Provider Adapters** (opt-in HTTP) with granular capability declarations (`can_send_context`, `can_receive_response`, `can_retrieve_stored_response`, `can_retrieve_remote_history`, `supports_streaming`, `supports_model_discovery`, `supports_server_session_continuation`).

@@ -11,6 +11,12 @@ CRITICAL_GATES: dict[str, tuple[tuple[str, ...], float]] = {
     "security/": (("src/contextbridge/security/",), 95.0),
     "backup/": (("src/contextbridge/backup/",), 95.0),
     "skills/migrator.py": (("src/contextbridge/skills/migrator.py",), 95.0),
+    "models/context.py": (("src/contextbridge/models/context.py",), 95.0),
+    "context/files.py": (("src/contextbridge/context/files.py",), 95.0),
+    "context/transfer.py": (("src/contextbridge/context/transfer.py",), 95.0),
+    "context/handoff.py": (("src/contextbridge/context/handoff.py",), 95.0),
+    "context/local_sessions.py": (("src/contextbridge/context/local_sessions.py",), 95.0),
+    "context_cli.py": (("src/contextbridge/context_cli.py",), 95.0),
 }
 
 

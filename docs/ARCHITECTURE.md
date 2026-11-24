@@ -102,3 +102,9 @@ Restorations verify every payload file hash against `manifest.json` (and reject 
 | `4` | Migration destination conflict without `--overwrite` |
 | `5` | Filesystem write, migration execution, or backup error |
 | `6` | Backup SHA-256 integrity verification failure |
+
+## 5. Offline Context Flow (Phase 2B)
+
+`context_cli.py` registers the four local commands. `context/files.py` guards file access, bounds JSON decoding, validates CBCF, and publishes artifacts with atomic no-overwrite semantics. `models/context.py` owns versioned Pydantic types and reference relationships. `context/local_sessions.py` normalizes explicit native files using existing agent IDs. `context/transfer.py` applies independent selectors and heuristic redaction to a copy. `context/handoff.py` derives the brief from structured records and renders deterministic CBCF or Markdown.
+
+`inspect` and dry runs have no write effects. Import targets a portable artifact. `context/files.py` rejects output into protected agent state and existing files. Context input, file references and tool records remain passive data throughout. See [CBCF](CONTEXT_FORMAT.md) for the field semantics and CLI contract.

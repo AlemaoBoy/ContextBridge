@@ -37,6 +37,8 @@ This matrix reflects only behaviors verified against official documentation and 
 
 ## Known Pending / Unconfirmed Capabilities
 
+For local session support in the v0.2.0 development tree, see [offline context compatibility](PROVIDER_COMPATIBILITY.md#3-coding-agent-local-session--context-capabilities). The directory table above describes Agent Skills only.
+
 - Parsing custom `[[skills.config]]` paths from Codex's `config.toml`.
 - Parsing Antigravity's workspace `skills.json` / `plugins.json` and `_agents/` / `_agent/` legacy folders.
 - Walking nested monorepo `.cursor/skills/` directories in Cursor.

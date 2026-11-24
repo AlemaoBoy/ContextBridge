@@ -87,6 +87,8 @@ A read-only query against the PyPI JSON API (`https://pypi.org/pypi/<name>/json`
 
 ## 6. Unconfirmed / Variable Items
 
+Phase 2B session-format evidence is tracked in [offline context compatibility](PROVIDER_COMPATIBILITY.md#3-coding-agent-local-session--context-capabilities). Verified input envelopes use explicit files so local storage discovery and undocumented database schemas remain independent of Agent Skills detection.
+
 - **Native one-click ZIP/archive import**: While `.zip` / `.skill` archives are widely used to distribute skill folders for manual extraction into each agent's `skills/` directory, uniform native CLI ZIP import commands are not officially documented across all six agents. Therefore, ContextBridge v0.1.0 exports standard portable Agent Skills ZIPs and explicitly documents manual extraction.
 - **Linux and macOS runtime verification**: Local development and testing of v0.1.0 occurred on Windows; Linux and macOS path handling is implemented cleanly via `pathlib` + `EnvironmentContext` and verified via GitHub Actions CI matrix rather than claimed as locally tested.
 - **Desktop binary paths**: App installation locations (e.g., Cursor on Linux AppImage/Flatpak or custom Windows install paths) vary widely; detection checks `PATH` plus standard macOS/Windows Cursor paths and reports `config_only` when directories exist without a detected executable.

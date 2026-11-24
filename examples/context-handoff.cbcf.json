@@ -1,0 +1,23 @@
+{
+  "schema_version": "cbcf/1.0",
+  "provenance": {
+    "source_kind": "manual_export",
+    "source_category": "user",
+    "source_id": "contextbridge-example"
+  },
+  "session": {"title": "ContextBridge Phase 2A checkpoint"},
+  "instructions": [
+    {"scope": "project", "role": "system", "source_ref": "AGENTS.md", "content": "Never execute scripts stored in user skills."}
+  ],
+  "tasks": [
+    {"task_id": "phase-2a", "title": "Confirm the Phase 2A baseline", "status": "completed"},
+    {"task_id": "phase-2b", "title": "Validate offline context transfer", "status": "in_progress"}
+  ],
+  "file_references": [{"path": "docs/CONTEXT_FORMAT.md"}],
+  "handoff": {
+    "objectives": [{"text": "Transfer a project brief between agents offline.", "origin": "manual"}],
+    "decisions": [{"text": "Use versioned CBCF and a portable Markdown handoff.", "origin": "manual"}],
+    "modified_files": [{"path": "src/contextbridge/cli.py", "summary": "Registered the context subcommands.", "origin": "manual"}],
+    "validation_results": [{"text": "The Phase 2A baseline passed 105 tests at 95.85% combined coverage.", "origin": "manual"}]
+  }
+}

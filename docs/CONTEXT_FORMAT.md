@@ -1,6 +1,6 @@
-# ContextBridge Context Format (CBCF) — Technical Specification (Draft v0.2.0)
+# ContextBridge Context Format (CBCF) — Technical Specification (v0.2.0 development)
 
-> **Status:** Architectural Proposal (Not Implemented in v0.1.0). Awaiting approval before implementation.
+> **Status:** CBCF 1.0 and local transfers are available in Phase 2B. The protocol mappings in section 7 are design targets for later phases.
 
 ## 1. Purpose & Design Invariants
 
@@ -185,7 +185,7 @@ Differentiates source origins explicitly so users and downstream converters neve
   - `text`: Plain or Markdown text content (`text: str`).
   - `reasoning`: Internal reasoning/thinking text plus optional vendor-bound `opaque_signature` and `signature_provider` (e.g., `"anthropic"` for `thinking.signature`, `"gemini"` for `thoughtSignature`).
   - `tool_call`: Declarative record of a requested tool invocation (`call_id`, `tool_name`, `arguments: dict[str, Any]`). **Never auto-executed.**
-  - `tool_result`: Declarative record of a tool output (`call_id`, `tool_name`, `output: str | dict[str, Any]`, `is_error: bool`).
+  - `tool_result`: Declarative record of a tool output (`call_id`, `tool_name`, `output: JsonValue`, `is_error`). JSON arrays preserve native multipart results. Unavailable IDs, arguments, results, and error flags may be null or omitted.
   - `file_ref`: Reference to an entry in `file_references` (path-safe relative POSIX path).
   - `unknown_block`: Catch-all container (`vendor: str`, `raw_type: str`, `payload: dict[str, Any]`) guaranteeing unknown vendor blocks (e.g., citations, server-side web search results, audio/image metadata) are never silently discarded during parsing.
 
@@ -195,6 +195,8 @@ Differentiates source origins explicitly so users and downstream converters neve
 - **`instructions`**: Ordered list separated from chat turns so protocols with top-level instruction fields (`OpenAI Responses instructions`, `Anthropic system`, `Gemini systemInstruction`) map cleanly without parsing them out of message arrays.
 - **`file_references`**: Path-validated references (checked via `validate_relative_path` when relative; no NTFS ADS, no traversal). `content_included` defaults to `false`; explicit opt-in is required to attach snippets.
 - **`tasks`**: Lightweight structured checklist state (`pending`, `in_progress`, `completed`, `blocked`, `cancelled`) for cross-agent task handoff.
+
+`schema_version` and `provenance` are required. IDs, timestamps and observations can be omitted when unavailable. Timestamps include an explicit UTC offset. Provider data belongs in namespaced `provider_extensions` objects or `unknown_block.payload`. CBCF rejects unrecognized schema fields outside its designated JSON containers. Every `file_ref` part points to a declared relative file reference. Session exports may carry original per-message token reports in `metadata.custom.reported_message_usage` without inferring aggregate usage.
 
 ### 4.4 Compatibility & Lossy Conversion Diagnostics
 
@@ -232,6 +234,8 @@ CBCF supports **independent selective inclusion/exclusion** during `export`, `co
 | `metadata` | `metadata` | Included | Excluded by default | Token usage, tags, custom metadata |
 | `reasoning` | `reasoning` parts | Only if exposed by source API | Excluded cross-provider by default | **Never fabricated**; only preserves reasoning blocks explicitly returned by a source API/log |
 | `skills` | `associated_skills[]` | Opt-in (`--include skills`) | Opt-in | References/metadata of active Agent Skills (`SKILL.md` name/version/summary) |
+
+Offline commands accept one category per repeatable `--include` or `--exclude` flag. Includes extend the defaults, and each exclusion removes its category independently. A mixed message keeps its selected parts in order. System and developer text follows `instructions`, while tool-role text follows `tool_results`. Handoff constraints, task lists, and file lists follow their corresponding categories. `--include-snippets` keeps snippets already stored in CBCF. `--include-extensions` keeps opaque vendor records when every category is enabled because their contents may span categories. For local or manual sources, that requires `--include reasoning --include skills` in addition to the defaults. Omitted categories, snippets, extensions, and redactions produce structured compatibility warnings when data is affected.
 
 ---
 
@@ -275,6 +279,8 @@ Every handoff item carries an explicit `origin` marker (`"extracted"` vs. `"manu
 
 `contextbridge context convert <file.cbcf.json> --to-format handoff-md` renders a clean, human-auditable, non-executable Markdown brief containing clearly labeled sections (`## Objectives`, `## Key Decisions`, `## Completed Tasks`, `## Pending Tasks`, `## Modified Files`, `## Known Errors`, `## Constraints`), annotating each bullet with `[extracted]` or `[manual]` and never fabricating unavailable items.
 
+Supply objectives, decisions, modified files, known errors, or validation results in `handoff` with their origin. ContextBridge also derives constraints from instructions, task lists from task status, and relevant paths from file references. It renders the selected conversation as quoted data and keeps timestamps and IDs in CBCF. Markdown is a lossy view. See the [editable CBCF example](../examples/context-handoff.cbcf.json) and its [generated Markdown](../examples/context-handoff.md).
+
 ---
 
 ## 7. Cross-Protocol Conversion Rules & Known Lossy Mappings
@@ -292,7 +298,20 @@ Every handoff item carries an explicit `origin` marker (`"extracted"` vs. `"manu
 
 ## 8. Security Rules for CBCF Files
 
-1. **Parsing limits**: Enforce maximum CBCF file size (default 10 MiB), maximum JSON nesting depth (24), and maximum message count (5,000) before Pydantic validation.
+1. **Parsing limits**: UTF-8 inputs are capped at 10 MiB, 24 nested JSON containers, 100,000 JSON structural elements, 5,000 canonical messages and 10,000 JSONL records. Duplicate keys, non-finite values, and malformed JSON fail before schema validation.
 2. **Zero code execution**: Importing or inspecting a CBCF file never invokes `tool_call` entries, shell scripts, or embedded prompt instructions.
-3. **Secret redaction**: Before `context export` or `context send`, run the ContextBridge secret scanner over `instructions`, `messages`, `tasks`, and optional `snippet` fields; redact matched tokens with `[REDACTED:<RULE_ID>]` when redaction is enabled (default for outbound network sends) and block credential files.
-4. **Path hygiene**: All file paths in `file_references` are validated with `security/paths.py` (blocking `..`, NTFS ADS, null bytes, and sensitive credential paths like `.env` or `~/.ssh`).
+3. **Secret redaction**: Offline writes always redact recognized credentials across the selected document, including nested metadata, opaque fields, tool data and snippets. Inspect reports matches without printing conversation content. Detection is heuristic. Review the artifact before sharing.
+4. **Path hygiene**: References reject traversal, absolute paths, NTFS ADS, device filenames, control characters, and sensitive credential paths. `--workspace DIR` also rejects symlinks and junctions at existing reference paths using filesystem metadata. File bodies are never opened. Input and output paths reject links, and artifacts publish atomically without replacing any destination. Local filesystems must support hard links for publication.
+
+## 9. Offline CLI
+
+```bash
+contextbridge context inspect examples/context-handoff.cbcf.json --json
+contextbridge context export --from gemini-cli --source ./session.jsonl --output ./session.cbcf.json --dry-run --json
+contextbridge context convert examples/context-handoff.cbcf.json --to-format handoff-md --output ./handoff.md
+contextbridge context import examples/context-handoff.cbcf.json --to cursor --apply
+```
+
+Export and convert write when given an output path unless `--dry-run` is set. `--session` optionally checks the ID recorded in the supplied input file. Import previews unless `--apply` is set. An agent ID targets the current directory or explicit `--output`, while a directory uses `contextbridge-handoff.md` or `contextbridge-handoff.cbcf.json` in that directory. All output directories must already exist. `--format` or `--to-format` accepts `cbcf`, `handoff-md`, or `markdown`. Use `.cbcf.json` or `.md` for the corresponding output filename.
+
+Use `--json` for a single success, preview, or operation-error object. Command-line syntax errors use Typer's usage output. Preview lists category counts, redactions, and compatibility warnings. Inspect estimates text tokens using one token per four UTF-8 bytes. The estimate is diagnostic and involves no API use. Exit codes are `0` for success or preview, `2` for invalid input or unsupported format, `3` for security limits or unsafe paths, `4` for an existing destination, and `5` for write failures.

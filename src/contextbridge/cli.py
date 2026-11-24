@@ -12,6 +12,7 @@ from rich.panel import Panel
 from contextbridge import __app_name__, __slogan__, __version__
 from contextbridge.adapters.registry import list_adapters
 from contextbridge.backup.manager import BackupManager
+from contextbridge.context_cli import context_app
 from contextbridge.core.discovery import discover_skills, scan_agents
 from contextbridge.core.doctor import run_doctor
 from contextbridge.core.exceptions import ContextBridgeError
@@ -50,6 +51,7 @@ backup_app = typer.Typer(
 )
 app.add_typer(skills_app, name="skills")
 app.add_typer(backup_app, name="backup")
+app.add_typer(context_app, name="context")
 
 
 def _version_callback(value: bool) -> None:
@@ -69,7 +71,7 @@ def root_callback(
         is_eager=True,
     ),
 ) -> None:
-    """ContextBridge — Universal local manager for AI coding agent skills."""
+    """ContextBridge — Universal local manager for AI coding agent skills and context."""
 
 
 def _build_env(project_dir: Path | None) -> EnvironmentContext:
