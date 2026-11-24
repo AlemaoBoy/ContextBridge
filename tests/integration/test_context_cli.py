@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from rich.text import Text
 from typer.testing import CliRunner
 
 from contextbridge.cli import app
@@ -255,7 +256,8 @@ def test_cli_text_output_and_custom_portable_path(sandbox: Path) -> None:
 def test_context_help_explains_command(command: str) -> None:
     result = runner.invoke(app, ["context", command, "--help"])
     assert result.exit_code == 0
-    assert "--json" in result.stdout and "--workspace" in result.stdout
+    help_text = Text.from_ansi(result.stdout).plain
+    assert "--json" in help_text and "--workspace" in help_text
 
 
 def test_context_entry_point_in_subprocess(sandbox: Path) -> None:
