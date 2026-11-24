@@ -63,7 +63,12 @@ dev = [
 [project.scripts]
 contextbridge = "contextbridge.cli:main"
 
-# Add [project.urls] once the public GitHub repository URL is finalized.
+[project.urls]
+Homepage = "https://github.com/AlemaoBoy/ContextBridge"
+Repository = "https://github.com/AlemaoBoy/ContextBridge"
+Documentation = "https://github.com/AlemaoBoy/ContextBridge/tree/main/docs"
+Issues = "https://github.com/AlemaoBoy/ContextBridge/issues"
+Changelog = "https://github.com/AlemaoBoy/ContextBridge/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/contextbridge"]

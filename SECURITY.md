@@ -27,7 +27,7 @@ Core security invariants:
 
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
-Instead, report vulnerabilities responsibly via GitHub Security Advisories (private vulnerability reporting) in the repository once published, or contact the maintainers privately with:
+Use [GitHub private vulnerability reporting](https://github.com/AlemaoBoy/ContextBridge/security/advisories/new) or contact the maintainers privately. Include the following details.
 
 1. A clear description of the vulnerability and affected component.
 2. Steps to reproduce or a minimal proof of concept.
