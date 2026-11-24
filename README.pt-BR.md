@@ -4,7 +4,9 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licen%C3%A7a-MIT-38BDF8.svg" alt="Licença: MIT" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/vers%C3%A3o-0.1.0-818CF8.svg" alt="Versão: 0.1.0" /></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/baseline-0.1.0-818CF8.svg" alt="Baseline 0.1.0" /></a>
+  <a href="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI na main" /></a>
+  <a href="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml?query=branch%3Adevelop"><img src="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml/badge.svg?branch=develop" alt="CI na develop" /></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.11%2B-38BDF8.svg" alt="Python 3.11+" /></a>
   <a href="SECURITY.md"><img src="https://img.shields.io/badge/telemetria-nenhuma-0D1117.svg" alt="Telemetria: Nenhuma" /></a>
 </p>
@@ -39,6 +41,8 @@ python examples/demo.py
 ## Quick Start
 
 O ContextBridge requer **Python 3.11 ou superior**.
+
+A branch `main` contém o baseline da v0.1.0 com as verificações da Fase 2A. A branch [`develop`](https://github.com/AlemaoBoy/ContextBridge/tree/develop) contém a v0.2.0 em desenvolvimento.
 
 > **Status de distribuição:** A versão v0.1.0 está disponível para instalação local a partir do código-fonte e **ainda não está publicada no PyPI**. Para futura publicação no PyPI, o nome exclusivo de distribuição definido é **`contextbridge-agents`** (evitando conflitos PEP 503 com os pacotes já existentes `context-bridge` e `contextbridge-cli`), mantendo **`ContextBridge`** como identidade do projeto e **`contextbridge`** como comando CLI.
 
