@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-38BDF8.svg" alt="License: MIT" /></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/baseline-0.1.0-818CF8.svg" alt="Baseline 0.1.0" /></a>
+  <a href="https://pypi.org/project/contextbridge-agents/"><img src="https://img.shields.io/pypi/v/contextbridge-agents?label=PyPI" alt="PyPI version" /></a>
   <a href="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI on main" /></a>
   <a href="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml?query=branch%3Adevelop"><img src="https://github.com/AlemaoBoy/ContextBridge/actions/workflows/ci.yml/badge.svg?branch=develop" alt="CI on develop" /></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.11%2B-38BDF8.svg" alt="Python 3.11+" /></a>
@@ -44,7 +44,16 @@ ContextBridge requires **Python 3.11 or newer**.
 
 The `main` branch contains the v0.1.0 baseline with Phase 2A quality hardening. The [`develop` branch](https://github.com/AlemaoBoy/ContextBridge/tree/develop) contains unreleased v0.2.0 development.
 
-The distribution name is **`contextbridge-agents`**. See [GitHub Releases](https://github.com/AlemaoBoy/ContextBridge/releases) for published artifacts.
+### Install from PyPI
+
+In an activated virtual environment, install the stable release from [PyPI](https://pypi.org/project/contextbridge-agents/).
+
+```bash
+python -m pip install contextbridge-agents==0.1.0
+contextbridge --version
+```
+
+### Install from source
 
 Clone the repository and enter the directory.
 
