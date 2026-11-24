@@ -83,7 +83,7 @@ A read-only query against the PyPI JSON API (`https://pypi.org/pypi/<name>/json`
 | `contextbridge-agents` | **AVAILABLE (HTTP 404)** | No package registered |
 | `agent-contextbridge` | **AVAILABLE (HTTP 404)** | No package registered |
 
-**Decision**: Keep **ContextBridge** as the project identity, `contextbridge` as the Python import package and CLI command, and use **`contextbridge-agents`** as the exclusive PyPI distribution name in `pyproject.toml` (not registered or published in v0.1.0).
+**Decision**: Keep **ContextBridge** as the project identity, `contextbridge` as the Python import package and CLI command, and use **`contextbridge-agents`** as the exclusive PyPI distribution name in `pyproject.toml` (selected before publication).
 
 ## 6. Unconfirmed / Variable Items
 

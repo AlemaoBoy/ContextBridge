@@ -1,6 +1,6 @@
 # ContextBridge Roadmap
 
-This document outlines the phased evolution of **ContextBridge** from the released **v0.1.0** local skills foundation to a universal, local-first AI context portability engine.
+This document outlines the phased evolution of **ContextBridge** from the **v0.1.0** local skills foundation to a universal, local-first AI context portability engine.
 
 > **Scope Boundary:** Items listed under **v0.2.0 and beyond** are planned architectural proposals and are **not implemented in v0.1.0**.
 

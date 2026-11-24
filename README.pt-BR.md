@@ -44,30 +44,47 @@ O ContextBridge requer **Python 3.11 ou superior**.
 
 A branch `main` contém o baseline da v0.1.0 com as verificações da Fase 2A. A branch [`develop`](https://github.com/AlemaoBoy/ContextBridge/tree/develop) contém a v0.2.0 em desenvolvimento.
 
-> **Status de distribuição:** A versão v0.1.0 está disponível para instalação local a partir do código-fonte e **ainda não está publicada no PyPI**. Para futura publicação no PyPI, o nome exclusivo de distribuição definido é **`contextbridge-agents`** (evitando conflitos PEP 503 com os pacotes já existentes `context-bridge` e `contextbridge-cli`), mantendo **`ContextBridge`** como identidade do projeto e **`contextbridge`** como comando CLI.
+O nome da distribuição é **`contextbridge-agents`**. Consulte o [GitHub Releases](https://github.com/AlemaoBoy/ContextBridge/releases) para ver os artefatos publicados.
+
+Clone o repositório e entre no diretório.
 
 ```bash
-# Clone o repositório e entre no diretório do projeto
+git clone https://github.com/AlemaoBoy/ContextBridge.git
+cd ContextBridge
+```
+
+Use o bloco do seu sistema para instalar a partir do código-fonte.
+
+**Windows (PowerShell)**
+
+```powershell
 python -m venv .venv
-
-# Linux / macOS:
-source .venv/bin/activate
-# Windows (PowerShell):
 .\.venv\Scripts\Activate.ps1
+python -m pip install -e .
+```
 
-# Instale localmente
-pip install -e .
+Se a política do PowerShell bloquear a ativação, use `.\.venv\Scripts\python.exe -m pip install -e .` e execute a CLI por `.\.venv\Scripts\contextbridge.exe`.
 
-# Verifique a instalação
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+```
+
+Verifique a instalação em qualquer sistema.
+
+```bash
 contextbridge --version
 contextbridge scan
 contextbridge doctor
 ```
 
-Para desenvolvimento (testes, lint, tipagem estrita e empacotamento):
+Para instalar as ferramentas de desenvolvimento no ambiente virtual:
 
 ```bash
-pip install -e ".[dev]"
+python -m pip install -e ".[dev]"
 ```
 
 ## Problema Resolvido
@@ -214,7 +231,7 @@ Consulte [SECURITY.md](SECURITY.md) para a política de relato responsável de v
 
 ## Limitações Transparentes (v0.1.0)
 
-- **Testado localmente em Windows (Python 3.15.2)**: Linux, macOS e Python 3.11–3.14 estão configurados em `.github/workflows/ci.yml`, mas a execução local desta versão ocorreu exclusivamente em Windows.
+- **Validação por sistema**. O GitHub Actions testou o código da v0.1.0 em Windows, Ubuntu e macOS com Python 3.11–3.15. A validação local ocorreu no Windows.
 - **Configurações avançadas ainda não lidas**: Entradas `[[skills.config]]` no `config.toml` do Codex, `skills.json` / `_agents/` do Antigravity, diretórios aninhados de monorepo no Cursor e estado `/trust` ou skills de extensões do Gemini CLI permanecem pendentes.
 - **Checagem de permissão em Windows**: `doctor` usa `os.access` (não mutante), que oferece verificação aproximada sobre ACLs NTFS no Windows.
 - **Portabilidade de arquivos ≠ comportamento idêntico**: Cada agente aplica suas próprias regras de aprovação de ferramentas e extensões de frontmatter.
@@ -245,4 +262,4 @@ Contribuições são bem-vindas! Leia [CONTRIBUTING.md](CONTRIBUTING.md), [AGENT
 
 ## Licença
 
-Distribuído sob a [Licença MIT](LICENSE).
+Licenciado sob a [Licença MIT](LICENSE).

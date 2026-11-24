@@ -31,9 +31,9 @@ This matrix reflects only behaviors verified against official documentation and 
 
 | OS | Status in v0.1.0 | Notes |
 | --- | --- | --- |
-| **Windows** | Implemented & locally tested | Includes Windows reserved filename checks (`CON`, `NUL`, `COM1..9`, `LPT1..9`), NTFS Alternate Data Stream (`:`) and trailing dot/space blocking, drive/UNC path blocking, case-insensitive collision checks, and reparse point / junction detection. |
-| **Linux** | Implemented; CI configured | Honors `XDG_CONFIG_HOME` and POSIX symlink checks. Not executed locally during v0.1.0 development; covered by GitHub Actions `ubuntu-latest`. |
-| **macOS** | Implemented; CI configured | Checks `/Applications/Cursor.app` read-only and POSIX symlinks. Not executed locally during v0.1.0 development; covered by GitHub Actions `macos-latest`. |
+| **Windows** | Verified locally and in CI | Includes Windows reserved filename checks (`CON`, `NUL`, `COM1..9`, `LPT1..9`), NTFS Alternate Data Stream (`:`) and trailing dot/space blocking, drive/UNC path blocking, case-insensitive collision checks, and reparse point / junction detection. |
+| **Linux** | Verified in CI | Honors `XDG_CONFIG_HOME` and POSIX symlink checks. Validated on GitHub Actions `ubuntu-latest`. |
+| **macOS** | Verified in CI | Checks `/Applications/Cursor.app` read-only and POSIX symlinks. Validated on GitHub Actions `macos-latest`. |
 
 ## Known Pending / Unconfirmed Capabilities
 

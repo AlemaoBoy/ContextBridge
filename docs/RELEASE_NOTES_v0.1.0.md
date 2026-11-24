@@ -2,7 +2,7 @@
 
 **Your context. Any agent. No lock-in.**
 
-ContextBridge **v0.1.0** is the initial open-source release of a 100% local, cross-platform CLI for discovering, validating, exporting, and safely migrating **Agent Skills** (`SKILL.md`) across AI coding agents—with zero telemetry and no external services.
+ContextBridge **v0.1.0** provides the first version of a local, cross-platform open-source CLI for discovering, validating, exporting, and safely migrating **Agent Skills** (`SKILL.md`) across AI coding agents—with zero telemetry and no external services.
 
 > **Disclaimer:** ContextBridge is an independent open-source project and is not affiliated with Anthropic, OpenAI, Google, Cursor, or OpenCode.
 
@@ -25,6 +25,6 @@ ContextBridge **v0.1.0** is the initial open-source release of a 100% local, cro
 
 ## Known Limitations
 
-- Local v0.1.0 verification was executed on **Windows (Python 3.15.2)**; Ubuntu, macOS, and Python `3.11`–`3.14` are configured in GitHub Actions CI.
+- GitHub Actions verified the v0.1.0 code on Windows, Ubuntu, and macOS with Python 3.11–3.15. Local verification used Windows.
 - Advanced agent-specific config parsers (Codex `config.toml`, Antigravity `skills.json`, Cursor nested monorepo folders, Gemini CLI `/trust` & extension skills) and future capabilities (MCP migration, `AGENTS.md`/`CLAUDE.md`/`GEMINI.md` conversion, sync, compaction, GUI) are planned for future releases.
-- Distribution package name is **`contextbridge-agents`** (`pip install -e .` from source in v0.1.0; not published to PyPI yet).
+- The distribution name is `contextbridge-agents`. See the [installation instructions](../README.md#quick-start) for the source workflow.

@@ -6,14 +6,20 @@ Thank you for your interest in contributing to **ContextBridge**!
 
 ContextBridge targets **Python 3.11+**.
 
-```bash
-python -m venv .venv
-# Linux / macOS:
-source .venv/bin/activate
-# Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
+**Windows (PowerShell)**
 
-pip install -e ".[dev]"
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+```
+
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
 ```
 
 ## Quality Checks

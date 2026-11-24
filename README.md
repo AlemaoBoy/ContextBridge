@@ -44,30 +44,47 @@ ContextBridge requires **Python 3.11 or newer**.
 
 The `main` branch contains the v0.1.0 baseline with Phase 2A quality hardening. The [`develop` branch](https://github.com/AlemaoBoy/ContextBridge/tree/develop) contains unreleased v0.2.0 development.
 
-> **Distribution Status:** ContextBridge v0.1.0 is currently installed locally from source. It is **not** published on PyPI yet. When published in the future, the planned PyPI distribution name is **`contextbridge-agents`** (avoiding PEP 503 conflicts with existing `context-bridge` and `contextbridge-cli` packages) while keeping **`ContextBridge`** as the project identity and **`contextbridge`** as the CLI command.
+The distribution name is **`contextbridge-agents`**. See [GitHub Releases](https://github.com/AlemaoBoy/ContextBridge/releases) for published artifacts.
+
+Clone the repository and enter the directory.
 
 ```bash
-# Clone the repository and enter the directory
+git clone https://github.com/AlemaoBoy/ContextBridge.git
+cd ContextBridge
+```
+
+Use the block for your system to install from source.
+
+**Windows (PowerShell)**
+
+```powershell
 python -m venv .venv
-
-# Linux / macOS:
-source .venv/bin/activate
-# Windows (PowerShell):
 .\.venv\Scripts\Activate.ps1
+python -m pip install -e .
+```
 
-# Install locally
-pip install -e .
+If PowerShell policy blocks activation, use `.\.venv\Scripts\python.exe -m pip install -e .` and run the CLI as `.\.venv\Scripts\contextbridge.exe`.
 
-# Verify CLI installation
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+```
+
+Verify the installation on any system.
+
+```bash
 contextbridge --version
 contextbridge scan
 contextbridge doctor
 ```
 
-For development (tests, lint, strict typing, packaging):
+Install development tools in the virtual environment with the following command.
 
 ```bash
-pip install -e ".[dev]"
+python -m pip install -e ".[dev]"
 ```
 
 ## Why ContextBridge?
@@ -214,7 +231,7 @@ See [SECURITY.md](SECURITY.md) for responsible disclosure guidance.
 
 ## Transparent Limitations (v0.1.0)
 
-- **Tested locally on Windows (Python 3.15.2)**: Linux, macOS, and Python 3.11–3.14 are configured in `.github/workflows/ci.yml`, but local verification of v0.1.0 was performed on Windows only.
+- **Platform verification**. GitHub Actions tested the v0.1.0 code on Windows, Ubuntu, and macOS with Python 3.11–3.15. Local verification used Windows.
 - **Custom agent manifests not parsed yet**: Codex `[[skills.config]]` in `config.toml`, Antigravity `skills.json` / `_agents/`, Cursor nested monorepo `.cursor/skills`, and Gemini CLI `/trust` / extension-bundled skills are documented as pending.
 - **Read-only permission check on Windows**: `doctor` uses non-mutating `os.access` checks, which are best-effort on Windows NTFS ACLs.
 - **File portability ≠ identical runtime behavior**: Agents enforce different tool approval flows and frontmatter extensions.
@@ -245,4 +262,4 @@ Contributions are welcome! Please review [CONTRIBUTING.md](CONTRIBUTING.md), [AG
 
 ## License
 
-Released under the [MIT License](LICENSE).
+Licensed under the [MIT License](LICENSE).
