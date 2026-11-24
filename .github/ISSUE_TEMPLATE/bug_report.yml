@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report a verified bug or unexpected behavior in ContextBridge
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug!
+        **Security issues:** Please do NOT report security vulnerabilities here. Follow `SECURITY.md` instead.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clear and concise summary of what went wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Exact commands and synthetic skill structure (never paste secrets or private tokens).
+      placeholder: |
+        1. Run `contextbridge ...`
+        2. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs. Actual Behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ContextBridge Version
+      placeholder: "e.g., 0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python Version
+      placeholder: "e.g., 3.12.7"
+    validations:
+      required: true

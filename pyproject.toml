@@ -1,0 +1,146 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "contextbridge-agents"
+version = "0.1.0"
+description = "Your context. Any agent. No lock-in. Universal local CLI for managing and porting AI coding agent skills."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "ContextBridge Contributors" },
+]
+keywords = [
+    "ai-agents",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "opencode",
+    "gemini-cli",
+    "cursor",
+    "cli",
+    "portability",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "pydantic>=2.7.0",
+    "PyYAML>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+    "types-PyYAML>=6.0.12",
+    "build>=1.2.0",
+    "twine>=5.0.0",
+]
+
+[project.scripts]
+contextbridge = "contextbridge.cli:main"
+
+# Add [project.urls] once the public GitHub repository URL is finalized.
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/contextbridge"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/docs",
+    "/examples",
+    "/README.md",
+    "/README.pt-BR.md",
+    "/LICENSE",
+    "/CHANGELOG.md",
+    "/SECURITY.md",
+    "/CONTRIBUTING.md",
+    "/CODE_OF_CONDUCT.md",
+    "/AGENTS.md",
+    "/pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+markers = [
+    "unit: fast isolated unit tests",
+    "integration: end-to-end filesystem and CLI integration tests",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "B",
+    "C4",
+    "UP",
+    "SIM",
+    "S",
+    "RUF",
+]
+ignore = [
+    "S101",  # assert allowed in tests and internal invariants
+    "B008",  # Typer uses Option()/Argument() calls in defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "S106", "S108", "S603"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+no_implicit_optional = true
+show_error_codes = true
+mypy_path = "src"
+packages = ["contextbridge"]
+
+[tool.coverage.run]
+source = ["src/contextbridge"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

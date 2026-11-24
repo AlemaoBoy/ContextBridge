@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 112" width="460" height="112" role="img" aria-label="ContextBridge Light Logo">
+  <defs>
+    <linearGradient id="cb-light-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="45%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+    <linearGradient id="cb-light-grad-rev" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+  </defs>
+  <rect width="460" height="112" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+  <!-- Emblem -->
+  <g transform="translate(20, 16) scale(0.625)">
+    <rect x="6" y="6" width="116" height="116" rx="28" fill="#F8FAFC" stroke="url(#cb-light-grad)" stroke-width="3.5" />
+    <path d="M 32 54 C 44 28, 84 28, 96 54" fill="none" stroke="url(#cb-light-grad)" stroke-width="7.5" stroke-linecap="round" />
+    <path d="M 96 74 C 84 100, 44 100, 32 74" fill="none" stroke="url(#cb-light-grad-rev)" stroke-width="7.5" stroke-linecap="round" />
+    <path d="M 36 64 C 52 50, 76 78, 92 64" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" opacity="0.85" />
+    <circle cx="32" cy="64" r="11" fill="#FFFFFF" stroke="#38BDF8" stroke-width="5" />
+    <circle cx="32" cy="64" r="3.5" fill="#0284C7" />
+    <circle cx="96" cy="64" r="11" fill="#FFFFFF" stroke="#818CF8" stroke-width="5" />
+    <circle cx="96" cy="64" r="3.5" fill="#6366F1" />
+  </g>
+  <!-- Wordmark -->
+  <text x="118" y="59" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="36" font-weight="700" letter-spacing="-0.6" fill="#0F172A">
+    Context<tspan fill="url(#cb-light-grad)">Bridge</tspan>
+  </text>
+  <text x="120" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0.2" fill="#475569">
+    Your context. Any agent. No lock-in.
+  </text>
+</svg>

@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+coverage.xml
+coverage.json
+htmlcov/
+
+# Linters & type checkers
+.ruff_cache/
+.mypy_cache/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local ContextBridge scratch/backups and secrets
+.contextbridge/
+.env
+.env.*
+!.env.example
+*.zip
+*.log
+

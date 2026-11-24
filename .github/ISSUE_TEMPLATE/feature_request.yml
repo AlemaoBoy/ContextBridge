@@ -1,0 +1,28 @@
+name: Feature Request
+description: Suggest a new agent adapter, capability, or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Use Case
+      description: What workflow or portability gap does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe the CLI UX, behavior, or adapter specification.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Official Documentation / References
+      description: For new agent adapters or formats, link official docs showing verified paths and behavior.
+  - type: textarea
+    id: security
+    attributes:
+      label: Security & Privacy Considerations
+      description: Note any filesystem, secret handling, or safety implications.

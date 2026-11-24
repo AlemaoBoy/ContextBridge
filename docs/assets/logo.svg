@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="ContextBridge Logo">
+  <defs>
+    <linearGradient id="cb-grad" x1="12%" y1="12%" x2="88%" y2="88%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#818CF8" />
+    </linearGradient>
+    <linearGradient id="cb-grad-rev" x1="88%" y1="12%" x2="12%" y2="88%">
+      <stop offset="0%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#0D1117" stroke="url(#cb-grad)" stroke-width="3" />
+  <!-- Upper interlocking curved bridge arc -->
+  <path d="M 32 54 C 44 28, 84 28, 96 54" fill="none" stroke="url(#cb-grad)" stroke-width="7.5" stroke-linecap="round" />
+  <!-- Lower interlocking curved bridge arc -->
+  <path d="M 96 74 C 84 100, 44 100, 32 74" fill="none" stroke="url(#cb-grad-rev)" stroke-width="7.5" stroke-linecap="round" />
+  <!-- Central signal flow wave connecting the two context nodes -->
+  <path d="M 36 64 C 52 50, 76 78, 92 64" fill="none" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round" opacity="0.9" />
+  <!-- Left context node -->
+  <circle cx="32" cy="64" r="11" fill="#0D1117" stroke="#38BDF8" stroke-width="5" />
+  <circle cx="32" cy="64" r="3.5" fill="#38BDF8" />
+  <!-- Right context node -->
+  <circle cx="96" cy="64" r="11" fill="#0D1117" stroke="#818CF8" stroke-width="5" />
+  <circle cx="96" cy="64" r="3.5" fill="#818CF8" />
+</svg>
