@@ -45,10 +45,11 @@ jobs:
       - name: Run Mypy type check
         run: python -m mypy src
 
-      - name: Run Pytest with coverage gates (>= 95% overall & critical modules)
-        run: |
-          python -m pytest --cov=contextbridge --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=95
-          python scripts/check_coverage_gates.py coverage.json
+      - name: Run Pytest with overall coverage gate (>= 95%)
+        run: python -m pytest --cov=contextbridge --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=95
+
+      - name: Check critical module coverage (>= 95%)
+        run: python scripts/check_coverage_gates.py coverage.json
 
       - name: Build wheel and sdist
         run: python -m build
